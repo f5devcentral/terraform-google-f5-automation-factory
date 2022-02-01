@@ -28,9 +28,10 @@ jobs:
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.3
   hadolint:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: hadolint/hadolint-action@v1.6.0
         with:
-          dockerfile: containers/forward-proxy/Dockerfile
+          dockerfile: fixme
