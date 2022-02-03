@@ -4,6 +4,7 @@ variable "prefix" {
     condition     = can(regex("^[a-z](?:[a-z0-9-]{4,61}[a-z0-9])$", var.prefix))
     error_message = "The prefix variable must be RFC1035 compliant and between 5 and 63 characters in length."
   }
+  default     = "f5-automation-factory"
   description = <<-EOD
 A prefix to apply to resource names to avoid collisions.
 EOD
