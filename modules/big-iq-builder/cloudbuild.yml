@@ -1,0 +1,104 @@
+# Download files from public sites and upload to a GCS bucket.
+# yamllint disable rule:line-length
+---
+steps:
+  # Warm up docker cache
+  - id: pull-busybox
+    name: docker
+    entrypoint: sh
+    args:
+      - -c
+      - docker pull busybox:$_BUSYBOX_TAG || exit 0
+    waitFor:
+      - "-"
+  - id: pull-terraform
+    name: docker
+    entrypoint: sh
+    args:
+      - -c
+      - docker pull hashicorp/terraform:$_TERRAFORM_TAG || exit 0
+    waitFor:
+      - "-"
+  - id: pull-gcloud-sdk
+    name: docker
+    entrypoint: sh
+    args:
+      - -c
+      - docker pull gcr.io/google.com/cloudsdktool/cloud-sdk:$_GCLOUD_SDK_TAG || exit 0
+    waitFor:
+      - "-"
+  # Initialise Terraform
+  - id: terraform-init
+    name: hashicorp/terraform:$_TERRAFORM_TAG
+    args:
+      - init
+      - -input=false
+      - -no-color
+    waitFor:
+      - pull-terraform
+    dir: $_BUILDER_DIR
+  # Execute Terraform plan
+  - id: terraform-plan
+    name: hashicorp/terraform:$_TERRAFORM_TAG
+    args:
+      - plan
+      - -input=false
+      - -no-color
+      - -out=builder.plan
+    waitFor:
+      - terraform-init
+    dir: $_BUILDER_DIR
+  # Apply Terraform
+  - id: terraform-apply
+    name: hashicorp/terraform:$_TERRAFORM_TAG
+    args:
+      - apply
+      - -input=false
+      - -no-color
+      - -auto-approve
+      - builder.plan
+    waitFor:
+      - terraform-plan
+    dir: $_BUILDER_DIR
+  # Pause to give the VM a chance to be ready
+  - id: pause
+    name: busybox:$_BUSYBOX_TAG
+    args:
+      - sh
+      - -c
+      - 'sleep 30'
+    waitFor:
+      - terraform-apply
+      - pull-busybox
+  # Attach to the VM and build the BIG-IQ image
+  - id: build-big-iq
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:$_GCLOUD_SDK_TAG
+    entrypoint: /bin/sh
+    args:
+      - ./remote_exec.sh
+    timeout: 1680s
+    waitFor:
+      - pause
+      - pull-gcloud-sdk
+    dir: $_BUILDER_DIR
+  # Terraform destroy
+  - id: terraform-destroy
+    name: hashicorp/terraform:$_TERRAFORM_TAG
+    args:
+      - destroy
+      - -input=false
+      - -no-color
+      - -auto-approve
+    waitFor:
+      - build-big-iq
+    dir: $_BUILDER_DIR
+timeout: 1800s
+substitutions:
+  # Busybox tag to use
+  _BUSYBOX_TAG: '1.35.0'
+  # Cloud SDK tag to use
+  _GCLOUD_SDK_TAG: '370.0.0-alpine'
+  # Terraform tag
+  _TERRAFORM_TAG: '1.1.4'
+  # The path to use for source Terraform, relative to root of repo
+  _BUILDER_DIR: ''

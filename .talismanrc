@@ -1,0 +1,16 @@
+---
+fileignoreconfig:
+- filename: examples/quick-start/README.md
+  checksum: 8eac4003bbb194a7ee9404bb1bb73eae836b136e1ee9e2b6439e85f1794d43d4
+- filename: examples/quick-start/variables.tf
+  checksum: 1e9455d4daea850085fc54deafb3320d72e59860dd392ae31507c40aa5be615a
+- filename: modules/big-iq-builder/file/generate-bigiq-image.sh
+  checksum: b036a8e90f7f9ec55b22f87d9c4788ea253c2a2f6d13c3bd050a7ac83beb0c5b
+- filename: modules/big-iq-builder/variables.tf
+  checksum: 34990c97290d95972cb48348a31e41b24da891d2bf082dfae02889a0047ae8fd
+- filename: outputs.tf
+  checksum: fcd78a872f6801392acf9fed0b2cec551a23549be25f4eb6449081b364f0f8f3
+- filename: variables.tf
+  checksum: 3f6c9ff3e3f0b626ccb7b3a8d07b652ba13e322a21516a45a64597c7bc6859e7
+- filename: README.md
+  checksum: 8c5a1c9f85bf62479a4cc98f3dc712e1064671b5bb18eb81a9a050358c2f7ce9
