@@ -81,7 +81,7 @@ resource "google_compute_instance" "builder" {
 #!/bin/sh
 apt update && apt install -y qemu-utils unzip lvm2 jq whois
 base64 -d <<EOF | zcat > /usr/local/bin/generate-bigiq-image.sh
-${base64gzip(file("${path.module}/file/generate-bigiq-image.sh"))}
+${base64gzip(file("${path.module}/files/generate-bigiq-image.sh"))}
 EOF
 chmod 0755 /usr/local/bin/generate-bigiq-image.sh
 chown root:root /usr/local/bin/generate-bigiq-image.sh
