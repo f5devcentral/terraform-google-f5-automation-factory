@@ -14,3 +14,5 @@ fileignoreconfig:
   checksum: 3f6c9ff3e3f0b626ccb7b3a8d07b652ba13e322a21516a45a64597c7bc6859e7
 - filename: README.md
   checksum: 8c5a1c9f85bf62479a4cc98f3dc712e1064671b5bb18eb81a9a050358c2f7ce9
+- filename: modules/bigiq-builder/README.md
+  checksum: f984ea6464d24289e8af66ad2b2073348ae9b59eeadc14f8886e69715e945ebc
