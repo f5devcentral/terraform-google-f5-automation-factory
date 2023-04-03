@@ -27,6 +27,8 @@ jobs:
           sudo chmod 0755 /usr/local/bin/terraform-docs
       - uses: actions/setup-python@v4
       - uses: pre-commit/action@v3.0.0
+        with:
+          python-version: '3.10'
   hadolint:
     if: false
     runs-on: ubuntu-latest
